@@ -16,7 +16,8 @@ const Room = require('./models/Room');
 const { checkDocAccess } = require('./middlewares/auth');
 
 const app = express();
-const PORT = 3000;
+const port = process.env.PORT || 3000;
+const dbUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/namu_wiki_db';
 
 // 설정
 require('dotenv').config();
@@ -351,9 +352,9 @@ app.get('/room/:roomId', isAuthenticated, async (req, res) => {
 });
 
 // DB 연결
-mongoose.connect('mongodb://127.0.0.1:27017/namu_wiki_db')
+mongoose.connect(dbUri)
     .then(() => {
         console.log('MongoDB 연결 성공!');
-        app.listen(PORT, () => console.log(`Server: http://localhost:${PORT}`));
+        app.listen(port, () => console.log(`Server: http://localhost:${port}`));
     })
     .catch(err => console.log('DB 연결 실패:', err));
