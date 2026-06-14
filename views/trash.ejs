@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+<div class="wiki-wrapper">
+    <main class="container">
+        <h2>🗑️ 휴지통</h2>
+        <form action="/trash/empty" method="POST">
+            <button type="submit" class="btn-secondary">휴지통 비우기</button>
+        </form>
+        <ul class="wiki-list" style="margin-top: 20px;">
+            <% docs.forEach(doc => { %>
+                <li><%= doc.title %></li>
+            <% }); %>
+        </ul>
+    </main>
+</div>
+<%- include('partials/footer') %>

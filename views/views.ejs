@@ -1,0 +1,64 @@
+<%- include('partials/header') %>
+
+<div class="wiki-wrapper">
+    <main class="container">
+        
+        <%# 1. 비공개 문서 비밀번호 확인 로직 %>
+        <% if (doc.isPrivate && !isAuthorized) { %>
+            <div class="password-box" style="padding: 50px; text-align: center; border: 1px solid #eee; border-radius: 15px; background: #fff; margin-bottom: 20px;">
+                <h2>🔒 비밀번호가 설정된 문서입니다.</h2>
+                <p style="color: #666; margin-bottom: 20px;">이 문서를 열람하려면 비밀번호를 입력하세요.</p>
+                <form action="/wiki/verify/<%= encodeURIComponent(doc.title) %>" method="POST">
+                    <input type="password" name="password" placeholder="비밀번호 입력" required 
+                           style="padding: 10px; border-radius: 5px; border: 1px solid #ddd; width: 200px;">
+                    <button type="submit" class="btn-new-doc" style="padding: 10px 20px; border:none; cursor:pointer;">확인</button>
+                </form>
+            </div>
+        <% } else { %>
+            
+            <%# 2. 문서 내용 영역 %>
+            <div class="doc-header">
+                <h1><%= doc.title %></h1>
+                <p style="font-size: 0.85rem; color: #777; margin-bottom: 20px;">
+                    최근 수정일: <%= doc.lastModified.toLocaleString() %> | 
+                    <% if (revisions && revisions.length > 0) { %>
+                        최근 수정자: <strong><%= revisions[0].editor ? revisions[0].editor.username : '알 수 없음' %></strong>
+                    <% } else { %>
+                        최근 수정자: 없음 (신규 문서)
+                    <% } %>
+                </p>
+            </div>
+
+            <div class="content-body" style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #eee;">
+                <%- htmlContent %> 
+            </div>
+            
+            <%# 3. 버튼 및 권한 로직 %>
+            <div class="action-buttons">
+                <% if (user) { %>    
+                        <a href="/edit/<%= encodeURIComponent(doc.title) %>" class="btn-new-doc">문서 수정하기</a>
+                <% } %>
+                <a href="/" class="btn-secondary" style="margin-left:10px;">홈으로</a>
+            </div>
+        <% } %>
+
+    </main>
+
+    <%# 4. 사이드바 (실시간 뉴스) %>
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3 class="section-title">실시간 뉴스</h3>
+            <ul class="news-list">
+                <% news.forEach(item => { %>
+                    <li>
+                        <a href="<%= item.link %>" target="_blank">
+                            <%- item.title.replace(/<\/?[^>]+(>|$)/g, "") %>
+                        </a>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,98 @@
+<%- include('partials/header') %>
+
+<div class="wiki-wrapper">
+    <main class="main-content">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <h1>나와 친구들의 위키 목록</h1>
+            <a href="/trash" style="font-size: 0.85rem; color: #888; text-decoration: none;">🗑️ 휴지통 보기</a>
+        </div>
+        
+        <div class="btn-group">
+            <a href="/edit" class="btn-new-doc">새 문서 만들기</a>
+            <a href="/edit-private" class="btn-new-doc" style="background-color: #6c5ce7;">프라이빗 문서 만들기</a>
+            <button onclick="toggleRoomMenu()" class="btn-new-doc" style="background-color: #00b894;">프라이빗 룸</button>
+            <% if (user) { %>
+                <a href="/rooms" class="btn-new-doc btn-room-list">내 프라이빗 룸 보기</a>
+            <% } %>
+        </div>
+
+        <div id="room-menu" style="display: none; background: #f0fdf4; padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #d1fae5;">
+            <form action="/room/create" method="POST" style="display: inline-block;">
+                <input type="text" name="name" placeholder="새 룸 이름" required style="padding: 8px; border-radius: 15px; border: 1px solid #ccc;">
+                <button type="submit" class="btn-new-doc" style="padding: 5px 15px;">룸 생성</button>
+            </form>
+            <form action="/room/join" method="POST" style="display: inline-block; margin-left: 10px;">
+                <input type="text" name="inviteCode" placeholder="초대 코드 입력" required style="padding: 8px; border-radius: 15px; border: 1px solid #ccc;">
+                <button type="submit" class="btn-new-doc" style="padding: 5px 15px; background-color: #0984e3;">입장</button>
+            </form>
+        </div>
+
+        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+
+        <div class="wiki-main-list" style="min-height: 500px;">
+            <ul class="wiki-list">
+                <% docs.forEach(doc => { %>
+                    <li>
+                        <a href="/wiki/<%= encodeURIComponent(doc.title) %>"><%= doc.title %></a>
+                        <a href="javascript:void(0);" onclick="confirmDelete('<%= encodeURIComponent(doc.title) %>', '<%= doc.title %>')" 
+                           style="color: #ff6b6b; font-size: 0.8rem; text-decoration: none; margin-left: 10px;">🗑️ 삭제하기</a>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+
+        <div class="pagination" style="text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 5px;">
+    <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+        <% for(let i = 1; i <= totalPages; i++) { %>
+            <a href="/?page=<%= i %>" 
+               class="page-link <%= (i === currentPage) ? 'active' : '' %>"
+               style="padding: 8px 12px; border: 1px solid #ddd; text-decoration: none; border-radius: 4px; color: #333;">
+               <%= i %>
+            </a>
+        <% } %>
+    <% } %>
+</div>
+
+<style>
+    .page-link.active {
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        color: white !important;
+        border: none;
+    }
+</style>
+    
+    </main>
+
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3 class="section-title">최근 변경</h3>
+            <ul class="wiki-list">
+                <% docs.forEach(doc => { %>
+                    <li><a href="/wiki/<%= encodeURIComponent(doc.title) %>"><%= doc.title %></a></li>
+                <% }); %>
+            </ul>
+        </div>
+        <div class="sidebar-section" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            <h3 class="section-title">실시간 뉴스</h3>
+            <ul class="news-list">
+                <% news.forEach(item => { %>
+                    <li><a href="<%= item.link %>" target="_blank"><%- item.title.replace(/<\/?[^>]+(>|$)/g, "") %></a></li>
+                <% }); %>
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<script>
+    function toggleRoomMenu() {
+        const menu = document.getElementById('room-menu');
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+    function confirmDelete(encodedTitle, originalTitle) {
+        if (confirm("정말 '" + originalTitle + "' 문서를 삭제하시겠습니까?")) {
+            window.location.href = "/delete/" + encodedTitle;
+        }
+    }
+</script>
+
+<%- include('partials/footer') %>

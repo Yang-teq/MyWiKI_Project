@@ -1,0 +1,20 @@
+<%- include('partials/header') %>
+
+<div class="wiki-wrapper">
+    <div class="centered-box">
+        <div style="font-size: 3rem; margin-bottom: 20px;">🎉</div>
+        
+        <h2>회원가입 완료!</h2>
+        <p style="color: #666; margin-bottom: 40px; line-height: 1.6;">
+            환영합니다, <strong><%= username %></strong>님!<br>
+            지금 바로 나만의 지식을 공유해보세요.
+        </p>
+        
+        <div class="btn-group" style="gap: 15px;">
+            <a href="/edit" class="btn-new-doc">글쓰기 시작하기</a>
+            <a href="/" class="btn-secondary" style="padding: 12px 24px; text-decoration: none;">홈으로</a>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

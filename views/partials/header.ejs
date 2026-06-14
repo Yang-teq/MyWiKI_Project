@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>나만의 나무위키</title>
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="logo">
+                <a href="/">MYWIKI</a>
+            </div>
+            
+            <div class="nav-links">
+                <% if (user) { %>
+                    <a href="/edit">새 문서 작성</a>
+                    <a href="/logout">로그아웃 (<%= user.username %>)</a>
+                <% } else { %>
+                    <a href="/login" class="small-text">로그인</a>
+                    <a href="/register" class="small-text">회원가입</a>
+                <% } %>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content-wrapper">

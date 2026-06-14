@@ -1,0 +1,139 @@
+/* 1. 기본 설정 */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+html, body { height: 100%; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; background-color: #f4f6f8; color: #333; }
+body { display: flex; flex-direction: column; }
+
+
+/* 2. 레이아웃 구조 */
+.content-wrapper { flex: 1; padding-bottom: 40px; }
+.wiki-wrapper { display: flex; max-width: 1200px; margin: 30px auto; gap: 20px; padding: 0 20px; align-items: flex-start; }
+
+/* 3. 헤더 및 내비게이션 */
+.main-header { background: #fff; border-bottom: 1px solid #ddd; padding: 20px 0; }
+.navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.logo a { font-size: 1.5rem; font-weight: bold; text-decoration: none; color: #333; }
+.nav-links a { margin-left: 20px; text-decoration: none; color: #666; transition: color 0.2s; }
+.nav-links a:hover { color: #6e8efb; }
+.small-text { font-size: 0.85rem; }
+
+/* 4. 본문 영역 */
+.container { flex: 3; background: white; padding: 40px; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+
+/* 5. 사이드바 영역 */
+.sidebar { flex: 1; min-width: 280px; background: #fff; padding: 20px; border: 1px solid #eee; border-radius: 12px; height: fit-content; }
+.sidebar-section { margin-bottom: 30px; }
+.sidebar-section h3.section-title { font-size: 0.95rem; color: #333; margin-bottom: 15px; border-left: 4px solid #6e8efb; padding-left: 10px; }
+.wiki-list, .news-list { list-style: none; padding: 0; }
+.wiki-list li a, .news-list li a { font-size: 0.85rem; color: #555; text-decoration: none; display: block; padding: 6px 0; transition: 0.2s; }
+.wiki-list li a:hover, .news-list li a:hover { color: #6e8efb; padding-left: 5px; }
+
+/* 6. 버튼 스타일 */
+.btn-new-doc {
+    display: inline-block; padding: 12px 24px;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white; text-decoration: none; border-radius: 50px; font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(110, 142, 251, 0.3);
+}
+.btn-new-doc:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(110, 142, 251, 0.5); }
+.btn-primary { background-color: #007bff; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; }
+.btn-secondary { background-color: #6c757d; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; }
+
+/* 7. 안내 페이지 및 폼 */
+.centered-box { max-width: 450px; margin: 80px auto; padding: 50px; background: #fff; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
+input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-bottom: 15px; }
+
+/* 8. 푸터 */
+footer { height: 60px; text-align: center; background-color: #f8f9fa; border-top: 1px solid #eee; padding: 20px 0; color: #888; font-size: 0.8rem; }
+
+/* 9. 삭제 버튼 스타일*/
+.wiki-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+section { margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+input { padding: 8px; margin-right: 10px; }
+button { padding: 8px 15px; cursor: pointer; }
+
+/* 기존 버튼 스타일을 둥글게 보완 */
+.btn-new-doc {
+    padding: 10px 20px;
+    background-color: #74b9ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px; /* 둥근 모서리 */
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+.btn-room-list { background-color: #fdcb6e; margin-left: auto; } /* 오른쪽 정렬 핵심 */
+.btn-new-doc:hover { opacity: 0.8; }
+
+
+/* 레이아웃 구조 통일 */
+.wiki-wrapper {
+    display: flex;
+    max-width: 1200px;
+    margin: 30px auto;
+    gap: 20px;
+    padding: 0 20px;
+    align-items: flex-start;
+}
+
+.main-content {
+    flex: 3;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.sidebar {
+    flex: 1;
+    min-width: 280px;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    height: fit-content;
+}
+
+/* 버튼 그룹 스타일 */
+.btn-group {
+    display: flex; 
+    gap: 10px; 
+    align-items: center; 
+    flex-wrap: wrap;
+    margin: 20px 0;
+    justify-content: center; /* 추가: 가로 중앙 정렬 */
+}
+
+.btn-new-doc {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-room-list { background-color: #fdcb6e !important; margin-left: auto; }
+.active-page { background: #6c5ce7; color: white !important; }
+
+/* 위키 목록 내 삭제 버튼 정렬 */
+.wiki-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}

@@ -1,0 +1,110 @@
+<%- include('partials/header') %>
+
+<div class="wiki-wrapper">
+    <main class="container">
+        <h1 style="margin-top: 0;">문서 편집</h1>
+        <p style="color: #666; margin-bottom: 20px;">
+            <%= (typeof doc !== 'undefined' && doc) ? '문서 내용을 수정합니다.' : '새로운 위키 문서를 작성합니다.' %>
+        </p>
+
+        <form action="/save" method="POST">
+            <% if (typeof roomId !== 'undefined') { %>
+                <input type="hidden" name="roomId" value="<%= roomId %>">
+            <% } %>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom: 5px; font-weight: 600;">문서 제목</label>
+                <input type="text" name="title" 
+                       value="<%= (typeof doc !== 'undefined' && doc) ? doc.title : '' %>" 
+                       <%= (typeof doc !== 'undefined' && doc) ? 'readonly' : '' %> 
+                       required>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <button type="button" id="ai-btn" class="btn-primary" 
+                        style="padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer; background: #a777e3; color: white; font-weight: bold;">
+                    ✨ AI로 나무위키 스타일 자동 작성
+                </button>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display:block; margin-bottom: 5px; font-weight: 600;">문서 내용</label>
+                <textarea name="content" rows="15" placeholder="내용을 입력하세요..." required><%= (typeof doc !== 'undefined' && doc) ? doc.content : '' %></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px; padding: 15px; border: 1px dashed #a777e3; border-radius: 8px;">
+                <% if (typeof isPrivateMode !== 'undefined' && isPrivateMode) { %>
+                <label style="display:block; margin-bottom: 5px; font-weight: 600;">문서 비밀번호 (설정 시 보호됨)</label>
+                <input type="password" name="password" placeholder="비밀번호를 입력하세요">
+                <small style="display:block; color: #888; margin-top: 5px;">* 이 비밀번호를 알아야 문서를 열람하고 수정할 수 있습니다.</small>
+                <% } %>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 20px; display: flex; gap: 10px;">
+                <button type="submit" class="btn-new-doc" style="border:none; cursor:pointer;">저장하기</button>
+                <a href="/" class="btn-secondary" style="text-decoration: none; padding: 12px 24px;">취소</a>
+            </div>
+        </form>
+
+        <script>
+            document.getElementById('ai-btn').addEventListener('click', async () => {
+                const title = document.querySelector('input[name="title"]').value;
+                if (!title) return alert('먼저 제목을 입력해주세요!');
+                
+                const btn = document.getElementById('ai-btn');
+                btn.innerText = '✨ AI가 문서를 작성 중입니다...';
+                btn.disabled = true;
+                
+                try {
+                    const res = await fetch('/generate-wiki', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.content) {
+                        document.querySelector('textarea[name="content"]').value = data.content;
+                    } else {
+                        alert('작성 중 오류가 발생했습니다: ' + (data.error || '알 수 없는 에러'));
+                    }
+                } catch (e) {
+                    alert('서버 연결 실패. 네트워크 상태를 확인하세요.');
+                } finally {
+                    btn.innerText = '✨ AI로 나무위키 스타일 자동 작성';
+                    btn.disabled = false;
+                }
+            });
+        </script>
+    </main>
+
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3 class="section-title">편집 도움말</h3>
+            <p style="font-size: 0.85rem; color: #666; line-height: 1.6;">
+                위키 문법을 사용하여 내용을 작성해보세요. <br><br>
+                - **제목**: # 제목<br>
+                - **굵게**: **글자**<br>
+                - **링크**: [문서명]<br>
+                - **목록**: * 항목
+            </p>
+        </div>
+
+        <div class="sidebar-section" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            <h3 class="section-title">실시간 뉴스</h3>
+            <ul class="news-list" style="list-style: none; padding: 0;">
+                <% if (typeof news !== 'undefined' && news.length > 0) { %>
+                    <% news.forEach(item => { %>
+                        <li style="margin-bottom: 10px;">
+                            <a href="<%= item.link %>" target="_blank" style="font-size: 0.85rem; color: #333; text-decoration: none;">
+                                <%- item.title.replace(/<\/?[^>]+(>|$)/g, "") %>
+                            </a>
+                        </li>
+                    <% }); %>
+                <% } %>
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+
+<div class="container" style="max-width: 800px; margin: 40px auto;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+    <h1><%= room.name %>의 비공개 문서함</h1>
+    <a href="/trash" style="font-size: 0.85rem; color: #888; text-decoration: none;">🗑️ 휴지통 보기</a>
+    </div>
+
+    <p>룸 초대 코드: <code><%= room.inviteCode %></code></p>
+
+    <a href="/edit?roomId=<%= room._id %>" class="btn-new-doc">이 룸에 새 문서 만들기</a>
+
+    <hr>
+
+    <h3>문서 목록</h3>
+    <ul class="wiki-list">
+        <% docs.forEach(doc => { %>
+            <li>
+                <a href="/wiki/<%= encodeURIComponent(doc.title) %>"><%= doc.title %></a>
+                <a href="/delete/<%= encodeURIComponent(doc.title) %>" 
+               style="color: red; margin-left: 10px;" 
+               onclick="return confirm('정말 삭제하시겠습니까?');">삭제하기</a>
+            </li>
+        <% }) %>
+    </ul>
+</div>
+
+<div class="pagination" style="text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 5px;">
+    <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+        <% for(let i = 1; i <= totalPages; i++) { %>
+            <a href="/?page=<%= i %>" 
+               class="page-link <%= (i === currentPage) ? 'active' : '' %>"
+               style="padding: 8px 12px; border: 1px solid #ddd; text-decoration: none; border-radius: 4px; color: #333;">
+               <%= i %>
+            </a>
+        <% } %>
+    <% } %>
+</div>
+
+<style>
+    .page-link.active {
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        color: white !important;
+        border: none;
+    }
+</style>
+
+<%- include('partials/footer') %>
