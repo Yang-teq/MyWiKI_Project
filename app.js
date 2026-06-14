@@ -113,15 +113,31 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.post('/generate-wiki', isAuthenticated, async (req, res) => {
+// 네이버 검색 엔진을 통한 마크다운 형식 변환 엔진
+app.post('/generate-wiki', async (req, res) => {
+    const { title, draftContent } = req.body;
+
     try {
-        const { title } = req.body;
         const completion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: `${title}에 대해 나무위키 스타일로 개요, 특징, 여담을 포함하여 마크다운(Markdown) 형식으로 자세히 작성해줘.` }],
+            messages: [{ 
+                role: "user", 
+                content: `
+                    아래 내용을 나무위키 스타일로 정리해줘.
+                    1. 내용을 절대 새로 창작하거나 지어내지 마.
+                    2. 마크다운 형식으로 '개요', '특징', '여담' 섹션을 나눠서 작성해.
+                    3. 문체는 나무위키 스타일(평어체)로 바꿔줘.
+                    
+                    제목: ${title}
+                    내용: ${draftContent}
+                ` 
+            }],
         });
+        
         res.json({ content: completion.choices[0].message.content });
-    } catch (err) { res.status(500).json({ error: 'AI 생성 실패' }); }
+    } catch (err) { 
+        res.status(500).json({ error: 'AI 포장 실패' }); 
+    }
 });
 
 // 인증 관련 라우트

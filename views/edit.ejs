@@ -49,6 +49,7 @@
         <script>
             document.getElementById('ai-btn').addEventListener('click', async () => {
                 const title = document.querySelector('input[name="title"]').value;
+                const draftContent = document.querySelector('textarea[name="content"]').value;
                 if (!title) return alert('먼저 제목을 입력해주세요!');
                 
                 const btn = document.getElementById('ai-btn');
@@ -59,7 +60,7 @@
                     const res = await fetch('/generate-wiki', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ title })
+                        body: JSON.stringify({ title, draftContent })
                     });
                     const data = await res.json();
                     
